@@ -25,14 +25,14 @@ fn a = 1
         , test "should report an error when a function has multiple arguments" <|
             \() ->
                 """module A exposing (..)
-fn a b =
+fn a b = 1
 """
                     |> Review.Test.run rule
                     |> Review.Test.expectErrors
                         [ Review.Test.error
                             { message = "REPLACEME"
                             , details = [ "REPLACEME" ]
-                            , under = "REPLACEME"
+                            , under = "fn a b = 1"
                             }
                         ]
         ]
