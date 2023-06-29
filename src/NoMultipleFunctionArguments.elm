@@ -8,8 +8,9 @@ module NoMultipleFunctionArguments exposing (rule)
 
 import Elm.Syntax.Declaration as Declaration exposing (Declaration)
 import Elm.Syntax.Expression as Expression exposing (Expression)
-import Elm.Syntax.Node as Node exposing (Node)
+import Elm.Syntax.Node as Node exposing (Node(..))
 import Elm.Syntax.Range exposing (Range)
+import Review.Fix as Fix
 import Review.Rule as Rule exposing (Rule)
 
 
@@ -52,6 +53,7 @@ rule =
     Rule.newModuleRuleSchema "NoMultipleFunctionArguments" {}
         |> Rule.withSimpleDeclarationVisitor declarationVisitor
         |> Rule.withSimpleExpressionVisitor expressionVisitor
+        |> Rule.providesFixesForModuleRule
         |> Rule.fromModuleRuleSchema
 
 
@@ -73,14 +75,39 @@ expressionVisitor node =
 
 
 reportFunction : Expression.FunctionImplementation -> Range -> List (Rule.Error {})
-reportFunction node range =
-    if List.length node.arguments > 1 then
-        [ Rule.error
-            { message = "REPLACEME"
-            , details = [ "REPLACEME" ]
-            }
-            range
-        ]
+reportFunction functionImplementation range =
+    case functionImplementation.arguments of
+        [] ->
+            []
 
-    else
-        []
+        (Node first _) :: rest ->
+            if List.isEmpty rest then
+                []
+
+            else
+                [ Rule.errorWithFix
+                    { message = "REPLACEME"
+                    , details = [ "REPLACEME" ]
+                    }
+                    range
+                    (Fix.insertAt first.end " =" :: fix (Node.range functionImplementation.expression) rest)
+                ]
+
+
+fix : Range -> List (Node a) -> List Fix.Fix
+fix bodyRange arguments =
+    case arguments of
+        [] ->
+            []
+
+        (Node range _) :: rest ->
+            if List.length rest == 0 then
+                [ Fix.insertAt range.start "\\"
+                , Fix.replaceRangeBy { start = range.end, end = bodyRange.start } " ->\n    "
+                ]
+
+            else
+                [ Fix.insertAt range.start "\\"
+                , Fix.insertAt range.end " -> "
+                ]
+                    ++ fix bodyRange rest
