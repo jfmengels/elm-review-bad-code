@@ -89,7 +89,7 @@ reportFunction functionImplementation range =
                     { message = "REPLACEME"
                     , details = [ "REPLACEME" ]
                     }
-                    range
+                    (Node.range functionImplementation.name)
                     (Fix.insertAt first.end " =" :: fix (Node.range functionImplementation.expression) rest)
                 ]
 

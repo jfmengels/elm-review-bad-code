@@ -33,7 +33,7 @@ fn a b =
                         [ Review.Test.error
                             { message = "REPLACEME"
                             , details = [ "REPLACEME" ]
-                            , under = "fn a b =\n    1"
+                            , under = "fn"
                             }
                             |> Review.Test.whenFixed """module A exposing (..)
 fn a = \\b ->
