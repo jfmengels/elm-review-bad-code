@@ -44,7 +44,7 @@ This rule is not useful when REPLACEME.
 You can try this rule out by running the following command:
 
 ```bash
-elm-review --template jfmengels/elm-review-bad-code/example --rules NoTopLevelLambdas
+elm-review --template jfmengels/elm-review-bad-code/preview --rules NoTopLevelLambdas
 ```
 
 -}

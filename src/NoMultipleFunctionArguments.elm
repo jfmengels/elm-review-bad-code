@@ -10,11 +10,17 @@ import Elm.Syntax.Declaration as Declaration exposing (Declaration)
 import Elm.Syntax.Expression as Expression exposing (Expression)
 import Elm.Syntax.Node as Node exposing (Node(..))
 import Elm.Syntax.Range exposing (Range)
-import Review.Fix as Fix
+import Review.Fix as Fix exposing (Fix)
 import Review.Rule as Rule exposing (Rule)
 
 
-{-| Reports... REPLACEME
+{-| Reports when a function has multiple arguments, and encourages using nested lambdas instead.
+
+**WARNING**: This rule is meant as a joke, and should probably not be used in production code.
+It is an attempt to transform Elm code into the worst possible Elm code possible
+([some more ideas on that](https://realmario.notion.site/Worst-Elm-Code-Possible-393f8fc7338b46afb13efb9766d909bf?pvs=4))
+
+**NOTE**: This rule is still a bit incomplete: it doesn't handle let functions not lambdas yet.
 
     config =
         [ NoMultipleFunctionArguments.rule
@@ -23,20 +29,21 @@ import Review.Rule as Rule exposing (Rule)
 
 ## Fail
 
-    a =
-        "REPLACEME example to replace"
+    fn a b c =
+        a + b + c
 
 
 ## Success
 
-    a =
-        "REPLACEME example to replace"
+    fn a =
+        \b ->
+            c ->
+                a + b + c
 
 
 ## When (not) to enable this rule
 
-This rule is useful when REPLACEME.
-This rule is not useful when REPLACEME.
+NEVER enable this rule in production. If you think there is a real use-case, let me know, I'd be curious to hear.
 
 
 ## Try it out
@@ -44,13 +51,13 @@ This rule is not useful when REPLACEME.
 You can try this rule out by running the following command:
 
 ```bash
-elm-review --template jfmengels/elm-review-bad-code/example --rules NoMultipleFunctionArguments
+elm-review --template jfmengels/elm-review-bad-code/preview --rules NoMultipleFunctionArguments
 ```
 
 -}
 rule : Rule
 rule =
-    Rule.newModuleRuleSchema "NoMultipleFunctionArguments" {}
+    Rule.newModuleRuleSchema "NoMultipleFunctionArguments" ()
         |> Rule.withSimpleDeclarationVisitor declarationVisitor
         |> Rule.withSimpleExpressionVisitor expressionVisitor
         |> Rule.providesFixesForModuleRule
@@ -61,7 +68,7 @@ declarationVisitor : Node Declaration -> List (Rule.Error {})
 declarationVisitor node =
     case Node.value node of
         Declaration.FunctionDeclaration { declaration } ->
-            reportFunction (Node.value declaration) (Node.range declaration)
+            reportFunction (Node.value declaration)
 
         _ ->
             []
@@ -74,8 +81,8 @@ expressionVisitor node =
             []
 
 
-reportFunction : Expression.FunctionImplementation -> Range -> List (Rule.Error {})
-reportFunction functionImplementation range =
+reportFunction : Expression.FunctionImplementation -> List (Rule.Error {})
+reportFunction functionImplementation =
     case functionImplementation.arguments of
         [] ->
             []
@@ -94,7 +101,7 @@ reportFunction functionImplementation range =
                 ]
 
 
-fix : Range -> List (Node a) -> List Fix.Fix
+fix : Range -> List (Node a) -> List Fix
 fix bodyRange arguments =
     case arguments of
         [] ->

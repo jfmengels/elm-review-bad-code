@@ -1,7 +1,7 @@
 {
     "type": "package",
     "name": "jfmengels/elm-review-bad-code",
-    "summary": "",
+    "summary": "Provides elm-review rules to make Elm code worse",
     "license": "BSD-3-Clause",
     "version": "1.0.0",
     "exposed-modules": [
