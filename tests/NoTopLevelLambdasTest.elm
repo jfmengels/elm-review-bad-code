@@ -31,8 +31,11 @@ fn a =
                     |> Review.Test.run rule
                     |> Review.Test.expectErrors
                         [ Review.Test.error
-                            { message = "REPLACEME"
-                            , details = [ "REPLACEME" ]
+                            { message = "Arguments in lambda could be joined with the arguments of the function"
+                            , details =
+                                [ "Unless you're trying to optimize for performance (which I am not currently checking for), it is unnecessary to separate the two as that hurts readability of the function."
+                                , "I would recommend moving the arguments from the lambda to the function declaration."
+                                ]
                             , under = "fn"
                             }
                             |> Review.Test.whenFixed """module A exposing (..)
