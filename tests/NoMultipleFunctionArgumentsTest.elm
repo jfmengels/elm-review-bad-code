@@ -31,8 +31,8 @@ fn a b =
                     |> Review.Test.run rule
                     |> Review.Test.expectErrors
                         [ Review.Test.error
-                            { message = "REPLACEME"
-                            , details = [ "REPLACEME" ]
+                            { message = "Multiple arguments for a function? What are you thinking?!"
+                            , details = [ "Get this out of my sight. If you run me with `elm-review --fix` I'll show you how to do your job!" ]
                             , under = "fn"
                             }
                             |> Review.Test.whenFixed """module A exposing (..)
