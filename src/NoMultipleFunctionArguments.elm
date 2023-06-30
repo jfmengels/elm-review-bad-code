@@ -7,7 +7,7 @@ module NoMultipleFunctionArguments exposing (rule)
 -}
 
 import Elm.Syntax.Declaration as Declaration exposing (Declaration)
-import Elm.Syntax.Expression as Expression exposing (Expression)
+import Elm.Syntax.Expression as Expression
 import Elm.Syntax.Node as Node exposing (Node(..))
 import Elm.Syntax.Range exposing (Range)
 import Review.Fix as Fix exposing (Fix)
@@ -59,7 +59,6 @@ rule : Rule
 rule =
     Rule.newModuleRuleSchema "NoMultipleFunctionArguments" ()
         |> Rule.withSimpleDeclarationVisitor declarationVisitor
-        |> Rule.withSimpleExpressionVisitor expressionVisitor
         |> Rule.providesFixesForModuleRule
         |> Rule.fromModuleRuleSchema
 
@@ -70,13 +69,6 @@ declarationVisitor node =
         Declaration.FunctionDeclaration { declaration } ->
             reportFunction (Node.value declaration)
 
-        _ ->
-            []
-
-
-expressionVisitor : Node Expression -> List (Rule.Error {})
-expressionVisitor node =
-    case Node.value node of
         _ ->
             []
 
