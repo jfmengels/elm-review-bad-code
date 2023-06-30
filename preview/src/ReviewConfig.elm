@@ -12,10 +12,12 @@ when inside the directory containing this file.
 -}
 
 import NoMultipleFunctionArguments
+import NoTopLevelLambdas
 import Review.Rule exposing (Rule)
 
 
 config : List Rule
 config =
     [ NoMultipleFunctionArguments.rule
+    , NoTopLevelLambdas.rule
     ]
