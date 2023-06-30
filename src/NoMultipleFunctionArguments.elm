@@ -53,7 +53,7 @@ NEVER enable this rule in production. If you think there is a real use-case, let
 You can try this rule out by running the following command:
 
 ```bash
-elm-review --template jfmengels/elm-review-bad-code/preview --rules NoMultipleFunctionArguments
+elm-review --template jfmengels/elm-review-bad-code/preview --rules NoMultipleFunctionArguments --fix
 ```
 
 -}
