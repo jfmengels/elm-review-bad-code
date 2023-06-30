@@ -16,11 +16,13 @@ import Review.Rule as Rule exposing (Rule)
 
 {-| Reports when a function has multiple arguments, and encourages using nested lambdas instead.
 
+🔧 Running with `--fix` will automatically remove all the reported errors.
+
 **WARNING**: This rule is meant as a joke, and should probably not be used in production code.
 It is an attempt to transform Elm code into the worst possible Elm code possible
 ([some more ideas on that](https://realmario.notion.site/Worst-Elm-Code-Possible-393f8fc7338b46afb13efb9766d909bf?pvs=4))
 
-**NOTE**: This rule is still a bit incomplete: it doesn't handle let functions not lambdas yet.
+**NOTE**: This rule is still a bit incomplete: it doesn't handle let functions nor lambdas yet.
 
     config =
         [ NoMultipleFunctionArguments.rule

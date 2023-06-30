@@ -4,7 +4,8 @@ Provides [`elm-review`](https://package.elm-lang.org/packages/jfmengels/elm-revi
 
 ## Provided rules
 
-- [`NoMultipleFunctionArguments`](https://package.elm-lang.org/packages/jfmengels/elm-review-bad-code/1.0.0/NoMultipleFunctionArguments) - Reports when a function has multiple arguments.
+- [🔧 `NoMultipleFunctionArguments`](https://package.elm-lang.org/packages/jfmengels/elm-review-bad-code/1.0.0/NoMultipleFunctionArguments) - Reports when a function has multiple arguments.
+- [🔧 `NoTopLevelLambdas`](https://package.elm-lang.org/packages/jfmengels/elm-review-bad-code/1.0.0/NoTopLevelLambdas) - Reports when a function's body consists of a lambda expression.
 
 ## Configuration
 
@@ -12,11 +13,13 @@ Provides [`elm-review`](https://package.elm-lang.org/packages/jfmengels/elm-revi
 module ReviewConfig exposing (config)
 
 import NoMultipleFunctionArguments
+import NoTopLevelLambdas
 import Review.Rule exposing (Rule)
 
 config : List Rule
 config =
     [ NoMultipleFunctionArguments.rule
+    , NoTopLevelLambdas.rule
     ]
 ```
 
