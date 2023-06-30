@@ -7,10 +7,10 @@ module NoTopLevelLambdas exposing (rule)
 -}
 
 import Elm.Syntax.Declaration as Declaration exposing (Declaration)
-import Elm.Syntax.Expression as Expression
+import Elm.Syntax.Expression as Expression exposing (Expression)
 import Elm.Syntax.Node as Node exposing (Node(..))
 import Elm.Syntax.Range exposing (Range)
-import Review.Fix as Fix
+import Review.Fix as Fix exposing (Fix)
 import Review.Rule as Rule exposing (Rule)
 
 
@@ -117,15 +117,7 @@ declarationVisitor node context =
                                 , details = [ "REPLACEME" ]
                                 }
                                 (Node.range (Node.value declaration).name)
-                                (case last (Node.value declaration).arguments of
-                                    Just (Node { end } _) ->
-                                        [ Fix.insertAt end (" " ++ context.extractSourceCode lambdaArgRange)
-                                        , Fix.removeRange { start = (Node.range (Node.value declaration).expression).start, end = (Node.range expression).start }
-                                        ]
-
-                                    Nothing ->
-                                        []
-                                )
+                                (fixError context declaration lambdaArgRange expression)
                             ]
 
                         _ ->
@@ -135,6 +127,18 @@ declarationVisitor node context =
                     []
 
         _ ->
+            []
+
+
+fixError : Context -> Node Expression.FunctionImplementation -> Range -> Node Expression -> List Fix
+fixError context (Node _ declaration) lambdaArgRange expression =
+    case last declaration.arguments of
+        Just (Node { end } _) ->
+            [ Fix.insertAt end (" " ++ context.extractSourceCode lambdaArgRange)
+            , Fix.removeRange { start = (Node.range declaration.expression).start, end = (Node.range expression).start }
+            ]
+
+        Nothing ->
             []
 
 

@@ -91,12 +91,16 @@ reportFunction functionImplementation =
                     , details = [ "REPLACEME" ]
                     }
                     (Node.range functionImplementation.name)
-                    (Fix.insertAt first.end " =" :: fix (Node.range functionImplementation.expression) rest)
+                    (Fix.insertAt first.end " ="
+                        :: introduceLambda (Node.range functionImplementation.expression) rest
+                    )
                 ]
 
 
-fix : Range -> List (Node a) -> List Fix
-fix bodyRange arguments =
+{-| Creates a fix that introduces lambdas for all arguments.
+-}
+introduceLambda : Range -> List (Node a) -> List Fix
+introduceLambda bodyRange arguments =
     case arguments of
         [] ->
             []
@@ -111,4 +115,4 @@ fix bodyRange arguments =
                 [ Fix.insertAt range.start "\\"
                 , Fix.insertAt range.end " -> "
                 ]
-                    ++ fix bodyRange rest
+                    ++ introduceLambda bodyRange rest
